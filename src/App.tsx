@@ -12,7 +12,7 @@ function App() {
       <div>
         <nav className="p-5 border-b flex gap-5">
           <Link to="/">Products</Link>
-          <Link to="/cart">Cart ({items.length} )</Link>
+          <Link to="/cart">Cart ({items.length})</Link>
         </nav>
       </div>
       <Routes>

@@ -5,11 +5,11 @@ import { useCartStore } from "@/store/useCartStore";
 
 export default function Cart() {
   // Mock data for visualization - replace with your store logic
-  const items = useCartStore((state) => state.items)
-  const addItem = useCartStore((state) => state.addItem)
-  const removeItem = useCartStore((state) => state.removeItem)
-  const total = useCartStore((state) => state.total)
-
+  const items = useCartStore((state) => state.items);
+  const addItem = useCartStore((state) => state.addItem);
+  const decreaseItem = useCartStore((state) => state.decreaseItem);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   if (items.length === 0) {
     return (
@@ -59,25 +59,45 @@ export default function Cart() {
                   </div>
 
                   {/* Quantity Controls */}
+                  {/* Quantity Controls */}
                   <div className="col-span-3 flex items-center justify-between sm:justify-center">
                     <div className="flex items-center border border-gray-200 rounded-md">
-                      <button
-                        className="p-2 hover:bg-gray-50 text-gray-600"
-                        disabled={item.quantity <= 1}
+                      {/* --- FIXED BUTTON START --- */}
+                      <Button
+                        className="p-2"
+                        variant={item.quantity > 1 ? "default" : "destructive"}
+                        size="icon" // Added size="icon" for better square dimension handling
+                        onClick={() => decreaseItem(item.id)} // Handler moved here!
                       >
-                        <Minus className="h-3 w-3" />
-                      </button>
-                      <span className="px-2 text-sm font-medium min-w-[2rem] text-center">
+                        {item.quantity > 1 ? (
+                          <Minus className="h-3 w-3" />
+                        ) : (
+                          <Trash2 className="h-3 w-3" />
+                        )}
+                      </Button>
+                      {/* --- FIXED BUTTON END --- */}
+
+                      <span className="px-2 text-sm font-medium min-w-8 text-center">
                         {item.quantity}
                       </span>
-                      <button onClick={()=>addItem(item)} className="p-2 hover:bg-gray-50 text-gray-600">
+
+                      <Button
+                        onClick={() => addItem(item)}
+                        className="p-2"
+                        size="icon"
+                      >
                         <Plus className="h-3 w-3" />
-                      </button>
+                      </Button>
                     </div>
-                    {/* Mobile Remove Button (Shown only on small screens next to qty) */}
-                    <button className="sm:hidden text-red-500 hover:text-red-600 text-sm font-medium">
+
+                    {/* Mobile Remove Button */}
+                    <Button
+                      onClick={() => removeItem(item.id)} // Ensure this also has a handler
+                      className="sm:hidden text-red-500 hover:text-red-600 text-sm font-medium"
+                      variant="ghost"
+                    >
                       Remove
-                    </button>
+                    </Button>
                   </div>
 
                   {/* Price & Desktop Remove */}
@@ -87,9 +107,8 @@ export default function Cart() {
                     </p>
 
                     <Button
-                      variant="ghost"
+                      variant="destructive-outline"
                       size="icon"
-                      className="text-gray-400 hover:text-red-600 hover:bg-red-50 hidden sm:flex"
                       onClick={() => removeItem(item.id)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -108,8 +127,6 @@ export default function Cart() {
                 Order Summary
               </h2>
 
-    
-
               <div className="h-px bg-gray-200 my-4" />
 
               <div className="flex justify-between items-center mb-6">
@@ -117,7 +134,7 @@ export default function Cart() {
                   Order Total
                 </span>
                 <span className="text-xl font-bold text-gray-900">
-                  ${total().toLocaleString()}
+                  ${total.toLocaleString()}
                 </span>
               </div>
 

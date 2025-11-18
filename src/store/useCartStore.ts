@@ -1,4 +1,4 @@
-import type { CartState } from "@/types/product";
+import { type CartState } from "@/types/product";
 import { create } from "zustand";
 
 export const useCartStore = create<CartState>((set, get) => ({
@@ -21,6 +21,13 @@ export const useCartStore = create<CartState>((set, get) => ({
       };
     }),
 
+  decreaseItem: (id) =>
+    set((state) => ({
+      items: state.items
+        .map((i) => (i.id === id ? { ...i, quantity: i.quantity - 1 } : i))
+        .filter((i) => i.quantity > 0), // logic: if 1 - 1 = 0, remove it
+    })),
+
   removeItem: (id) =>
     set((state) => ({
       items: state.items.filter((i) => i.id !== id),
@@ -28,5 +35,6 @@ export const useCartStore = create<CartState>((set, get) => ({
 
   clear: () => set({ items: [] }),
 
-  total: () => get().items.reduce((total, item) => total + item.price * item.quantity, 0),
+  total: () =>
+    get().items.reduce((total, item) => total + item.price * item.quantity, 0),
 }));
