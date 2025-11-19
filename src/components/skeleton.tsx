@@ -198,7 +198,7 @@ const Skeleton = () => {
                             return (
                               <span
                                 key={tag}
-                                className="text-xs bg-neutral-100 border px-2 py-0.5 rounded-full text-neutral-700 flex items-center gap-1"
+                                className="text-xs border px-2 py-0.5 rounded-full squircle text-neutral-700 flex items-center gap-1"
                               >
                                 <TagIcon className="w-3 h-3" />
                                 {tag}
