@@ -159,7 +159,7 @@ const Skeleton = () => {
             <motion.div
               ref={ref}
               layout
-              className="max-w-sm rounded-t-[50px] squircle bg-neutral-100 border border-neutral-200 flex-1 mx-auto size-full p-1.5 space-y-1.5 mt-6"
+              className="max-w-sm rounded-t-[50px] squircle bg-neutral-100 border border-neutral-200 flex-1 mx-auto size-full p-1.5 space-y-1.5 mt-6 mask-b-from-20% mask-b-to-90%"
             >
               {activeCards?.map((index) => {
                 const service = services[index];
